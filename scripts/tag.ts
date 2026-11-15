@@ -5,10 +5,11 @@ import { ADS_CSV, ROOT, TAGS_DIR } from "./env";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { mediaTypeFor, parseAdsCsv, type AdRow } from "../lib/ads";
-import { callJson } from "../lib/claude";
+import { callJson, llmProvider } from "../lib/llm";
 import { TagSchema, type Tags } from "../lib/taxonomy";
 
-const CONCURRENCY = 4;
+// Gemini's free tier allows only a few requests per minute; the client also retries 429s.
+const CONCURRENCY = llmProvider() === "gemini" ? 1 : 4;
 
 const SYSTEM = `You tag static social media ads for a searchable reference library.
 Return one JSON object describing the ad image.
@@ -39,10 +40,8 @@ async function tagOne(ad: AdRow): Promise<{ tags: Tags; tokens: number }> {
     callJson({
       schema: TagSchema,
       system: SYSTEM,
-      content: [
-        { type: "image", source: { type: "base64", media_type: mediaTypeFor(ad.image_path), data } },
-        { type: "text", text: `Brand: ${ad.brand}\nCategory: ${ad.category}\nCaption above the image:\n${ad.primary_text || "(none)"}` },
-      ],
+      image: { mediaType: mediaTypeFor(ad.image_path), base64: data },
+      text: `Brand: ${ad.brand}\nCategory: ${ad.category}\nCaption above the image:\n${ad.primary_text || "(none)"}`,
     });
   let result;
   try {

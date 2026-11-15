@@ -30,6 +30,7 @@ export async function embed(texts: string[], inputType: InputType): Promise<Embe
       input_type: inputType,
       output_dimension: EMBEDDING_DIM,
     }),
+    signal: AbortSignal.timeout(30_000),
   });
   if (!res.ok) {
     throw new Error(`Voyage embeddings failed: ${res.status} ${await res.text()}`);

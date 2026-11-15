@@ -140,8 +140,10 @@ describe("hit rate", () => {
 
 describe("missingConfig", () => {
   it("names every missing setting and none of the values", () => {
-    expect(missingConfig({})).toEqual(["DATABASE_URL", "VOYAGE_API_KEY", "ANTHROPIC_API_KEY"]);
+    expect(missingConfig({})).toEqual(["DATABASE_URL", "VOYAGE_API_KEY", "GEMINI_API_KEY"]);
+    expect(missingConfig({ DATABASE_URL: "x", VOYAGE_API_KEY: "y", GEMINI_API_KEY: "g" })).toEqual([]);
     expect(missingConfig({ DATABASE_URL: "x", VOYAGE_API_KEY: "y", ANTHROPIC_AUTH_TOKEN: "z" })).toEqual([]);
+    expect(missingConfig({ DATABASE_URL: "x", VOYAGE_API_KEY: "y", LLM_PROVIDER: "anthropic" })).toEqual(["ANTHROPIC_API_KEY"]);
   });
 
   it("reads naturally for one or several", () => {

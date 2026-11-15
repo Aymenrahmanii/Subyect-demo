@@ -1,5 +1,5 @@
 import { publicImageUrl } from "./ads";
-import { callJson } from "./claude";
+import { callJson } from "./llm";
 import { db, toVectorLiteral } from "./db";
 import { embedOne } from "./embed";
 import { applyPicks, rerankSystemPrompt, rerankUserText, RerankSchema, type Candidate, type RankedResult } from "./rerank";
@@ -80,7 +80,7 @@ export async function searchReferences(
     const { data, usage } = await callJson({
       schema: RerankSchema,
       system: rerankSystemPrompt(limit),
-      content: [{ type: "text", text: rerankUserText(brief, candidates) }],
+      text: rerankUserText(brief, candidates),
     });
     picks = data.results;
     inputTokens = usage.inputTokens;

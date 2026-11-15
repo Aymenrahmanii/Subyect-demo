@@ -7,7 +7,7 @@ Type a concept brief for a static ad and get the five best reference ads from a 
 1. **Collect**: 60 static ads from 8 DTC brands, saved by hand from the Meta Ad Library (`data/ads/`, `data/ads.csv`).
 2. **Tag**: each ad is tagged once by a vision model into fixed value lists (`scripts/tag.ts`, schema in `lib/taxonomy.ts`).
 3. **Store**: tags plus a Voyage `voyage-3.5` embedding go into one Postgres table on Neon with pgvector (`db/schema.sql`, `scripts/load.ts`).
-4. **Search**: embed the brief, fetch 20 candidates with optional filters, then a Claude rerank picks the best 5, at most 2 per brand (`lib/search.ts`).
+4. **Search**: embed the brief, fetch 20 candidates with optional filters, then an LLM rerank (Gemini or Claude) picks the best 5, at most 2 per brand (`lib/search.ts`).
 5. **Expose**: the same function as the MCP tool `search_references` (`mcp/server.ts`).
 6. **Measure**: hit rate at 5 on 12 test briefs against a keyword baseline (`scripts/eval.ts`).
 
@@ -44,12 +44,13 @@ _Two concrete examples, written after reading the code._
 
 ## Run it
 
-Requires Node 20+, a Neon project, an Anthropic API key and a Voyage API key.
+Requires Node 20+, a Neon project, a Voyage API key, and an LLM key: Google Gemini (free tier, default) or Anthropic Claude. The LLM is picked from whichever key is set, or from `LLM_PROVIDER`.
 
 ```bash
 npm install
-cp .env.example .env.local        # fill in DATABASE_URL, ANTHROPIC_API_KEY, VOYAGE_API_KEY
+cp .env.example .env.local        # fill in DATABASE_URL, VOYAGE_API_KEY, GEMINI_API_KEY
 # put images in data/ads/ and rows in data/ads.csv (see data/ads.example.csv)
+npm run check                     # confirms Neon, Voyage and the LLM all answer
 npm run tag                       # vision tags -> data/tags/<id>.json (skips ads already tagged)
 npm run load                      # creates the table, embeds, upserts, copies images to public/ads/
 npm run try                       # 5 sample briefs in the terminal
