@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { mediaTypeFor, parseAdsCsv, publicImageUrl } from "../lib/ads";
+import { missingConfig, missingConfigMessage } from "../lib/config";
 import { hitRate, isHit } from "../lib/metrics";
 import { applyPicks, MAX_PER_BRAND, type Candidate } from "../lib/rerank";
 import { buildOrTsQuery, buildSearchText } from "../lib/searchText";
@@ -134,5 +135,19 @@ describe("hit rate", () => {
     ]);
     expect(rate).toBe(0.5);
     expect(hitRate([])).toBe(0);
+  });
+});
+
+describe("missingConfig", () => {
+  it("names every missing setting and none of the values", () => {
+    expect(missingConfig({})).toEqual(["DATABASE_URL", "VOYAGE_API_KEY", "ANTHROPIC_API_KEY"]);
+    expect(missingConfig({ DATABASE_URL: "x", VOYAGE_API_KEY: "y", ANTHROPIC_AUTH_TOKEN: "z" })).toEqual([]);
+  });
+
+  it("reads naturally for one or several", () => {
+    expect(missingConfigMessage(["VOYAGE_API_KEY"])).toBe(
+      "Search isn't set up yet: VOYAGE_API_KEY is missing. Add it to .env.local and restart the server.",
+    );
+    expect(missingConfigMessage(["DATABASE_URL", "VOYAGE_API_KEY"])).toContain("are missing. Add them");
   });
 });

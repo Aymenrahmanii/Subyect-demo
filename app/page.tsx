@@ -157,7 +157,7 @@ export default function Home() {
 
           {status === "error" && (
             <p role="alert" className="mb-6 border border-grease/60 px-4 py-3 text-[14px] text-proof">
-              <span className="font-semibold text-grease">Search failed.</span> {error} Check the brief and try again.
+              <span className="font-semibold text-grease">Search failed.</span> {error}
             </p>
           )}
 
