@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+/* Darkroom proof sheet: charcoal ground, black film frames, amber edge print,
+   one grease-pencil red for marks. Dark only: it's viewed on a screen share. */
+:root {
+  --sheet: #141414;
+  --sheet-raised: #1b1b1b;
+  --film: #050505;
+  --rule: #2b2b2a;
+  --rule-strong: #43433f;
+  --proof: #e6e6e3;
+  --proof-dim: #a8a8a2;
+  --edge: #f2c21b;
+  --grease: #e0352b;
+  --grease-press: #c9301f;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-sheet: var(--sheet);
+  --color-sheet-raised: var(--sheet-raised);
+  --color-film: var(--film);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-proof: var(--proof);
+  --color-proof-dim: var(--proof-dim);
+  --color-edge: var(--edge);
+  --color-grease: var(--grease);
+  --color-grease-press: var(--grease-press);
+  --font-sans: var(--font-archivo);
+  --font-edge: var(--font-archivo-narrow);
+  --font-marker: var(--font-marker-face);
+}
+
+html {
+  background: var(--sheet);
+}
+
+body {
+  background: var(--sheet);
+  color: var(--proof);
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-feature-settings: "tnum" 1;
+}
+
+::selection {
+  background: var(--grease);
+  color: #fff;
+}
+
+textarea,
+input {
+  caret-color: var(--grease);
+}
+
+:focus-visible {
+  outline: 2px solid var(--grease);
+  outline-offset: 3px;
+}
+
+* {
+  scrollbar-color: var(--rule-strong) var(--sheet);
+}
+
+/* Edge print: the narrow tracked caps film stock carries along its border. */
+.edge-print {
+  font-family: var(--font-archivo-narrow), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Signature: frames develop, then the grease pencil circles each pick in order. */
+@keyframes develop {
+  from {
+    opacity: 0;
+    filter: brightness(2.4) contrast(0.4) grayscale(1);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+
+@keyframes mark {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes write-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) rotate(-8deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-6deg);
+  }
+}
+
+@keyframes exposing {
+  0%,
+  100% {
+    background-color: #1a1a1a;
+  }
+  50% {
+    background-color: #262624;
+  }
+}
+
+.frame-develop {
+  animation: develop 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.grease-circle {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: mark 520ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.grease-rank {
+  animation: write-in 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.frame-exposing {
+  animation: exposing 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame-develop,
+  .grease-rank,
+  .frame-exposing {
+    animation: none;
+  }
+  .grease-circle {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .loupe {
+    transition: none !important;
+  }
+}

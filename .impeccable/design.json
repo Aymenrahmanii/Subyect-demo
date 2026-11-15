@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-15T00:00:00Z",
+  "title": "Design System: Reference search",
+  "extensions": {
+    "colorMeta": {
+      "grease": { "role": "primary", "displayName": "Grease Pencil Red", "canonical": "#e0352b", "tonalRamp": ["oklch(15% 0.06 29)", "oklch(27% 0.1 29)", "oklch(39% 0.15 29)", "oklch(51% 0.19 29)", "oklch(61% 0.21 29)", "oklch(72% 0.15 29)", "oklch(84% 0.08 29)", "oklch(95% 0.02 29)"] },
+      "grease-press": { "role": "primary", "displayName": "Pressed Grease", "canonical": "#c9301f", "tonalRamp": ["oklch(15% 0.06 31)", "oklch(27% 0.1 31)", "oklch(39% 0.15 31)", "oklch(50% 0.18 31)", "oklch(56% 0.2 31)", "oklch(70% 0.14 31)", "oklch(83% 0.08 31)", "oklch(95% 0.02 31)"] },
+      "edge": { "role": "secondary", "displayName": "Film-Edge Amber", "canonical": "#f2c21b", "tonalRamp": ["oklch(15% 0.04 88)", "oklch(28% 0.07 88)", "oklch(41% 0.1 88)", "oklch(54% 0.12 88)", "oklch(67% 0.15 88)", "oklch(83% 0.17 88)", "oklch(90% 0.11 88)", "oklch(96% 0.04 88)"] },
+      "sheet": { "role": "neutral", "displayName": "Charcoal Sheet", "canonical": "#141414", "tonalRamp": ["oklch(15% 0 0)", "oklch(20% 0 0)", "oklch(30% 0 0)", "oklch(42% 0 0)", "oklch(55% 0 0)", "oklch(68% 0 0)", "oklch(82% 0 0)", "oklch(95% 0 0)"] },
+      "sheet-raised": { "role": "neutral", "displayName": "Raised Sheet", "canonical": "#1b1b1b", "tonalRamp": ["oklch(15% 0 0)", "oklch(22% 0 0)", "oklch(30% 0 0)", "oklch(42% 0 0)", "oklch(55% 0 0)", "oklch(68% 0 0)", "oklch(82% 0 0)", "oklch(95% 0 0)"] },
+      "film": { "role": "neutral", "displayName": "Film Black", "canonical": "#050505", "tonalRamp": ["oklch(10% 0 0)", "oklch(20% 0 0)", "oklch(30% 0 0)", "oklch(42% 0 0)", "oklch(55% 0 0)", "oklch(68% 0 0)", "oklch(82% 0 0)", "oklch(95% 0 0)"] },
+      "rule": { "role": "neutral", "displayName": "Hairline", "canonical": "#2b2b2a", "tonalRamp": ["oklch(15% 0.002 107)", "oklch(28% 0.002 107)", "oklch(38% 0.003 107)", "oklch(48% 0.004 107)", "oklch(60% 0.004 107)", "oklch(72% 0.004 107)", "oklch(84% 0.003 107)", "oklch(95% 0.002 107)"] },
+      "rule-strong": { "role": "neutral", "displayName": "Strong Hairline", "canonical": "#43433f", "tonalRamp": ["oklch(15% 0.005 107)", "oklch(25% 0.006 107)", "oklch(38% 0.007 107)", "oklch(48% 0.007 107)", "oklch(60% 0.007 107)", "oklch(72% 0.006 107)", "oklch(84% 0.004 107)", "oklch(95% 0.002 107)"] },
+      "proof": { "role": "neutral", "displayName": "Proof Grey", "canonical": "#e6e6e3", "tonalRamp": ["oklch(15% 0.003 107)", "oklch(27% 0.003 107)", "oklch(39% 0.003 107)", "oklch(51% 0.003 107)", "oklch(63% 0.003 107)", "oklch(75% 0.003 107)", "oklch(92% 0.003 107)", "oklch(97% 0.002 107)"] },
+      "proof-dim": { "role": "neutral", "displayName": "Dim Proof", "canonical": "#a8a8a2", "tonalRamp": ["oklch(15% 0.007 107)", "oklch(27% 0.007 107)", "oklch(39% 0.007 107)", "oklch(51% 0.007 107)", "oklch(63% 0.007 107)", "oklch(72% 0.008 107)", "oklch(85% 0.006 107)", "oklch(95% 0.003 107)"] },
+      "proof-faint": { "role": "neutral", "displayName": "Faint Proof", "canonical": "#8d8d88", "tonalRamp": ["oklch(15% 0.007 107)", "oklch(27% 0.007 107)", "oklch(39% 0.007 107)", "oklch(51% 0.007 107)", "oklch(64% 0.008 107)", "oklch(75% 0.007 107)", "oklch(86% 0.005 107)", "oklch(95% 0.003 107)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The brief as it is typed; the largest text on the page is the user's own words." },
+      "headline": { "displayName": "Headline", "purpose": "Product name in the rail, the sheet heading, the primary button." },
+      "title": { "displayName": "Title", "purpose": "Brand name under each frame." },
+      "body": { "displayName": "Body", "purpose": "Pick reasons, example briefs, select values, error text; long notes cap at 60ch." },
+      "body-sm": { "displayName": "Body Small", "purpose": "Link text and empty-frame guidance." },
+      "label": { "displayName": "Edge Print", "purpose": "Uppercase tracked narrow caps for frame numbers, days live, tags, field labels, status lines, rail facts." },
+      "numeral": { "displayName": "Grease Numeral", "purpose": "Handwritten rank numeral beside each pick, tilted -6deg. Never for words." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "develop", "value": "900ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Frame fades in from overexposed grey (brightness 2.4, contrast 0.4, grayscale) to the image; staggered 260ms in rank order." },
+      { "name": "mark", "value": "520ms cubic-bezier(0.65, 0, 0.35, 1)", "purpose": "Grease loop draws via stroke-dashoffset after all frames develop, 220ms apart per rank; second pass trails by 40ms." },
+      { "name": "write-in", "value": "280ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Rank numeral writes in 380ms after its loop starts, settling at rotate(-6deg)." },
+      { "name": "exposing", "value": "1.4s ease-in-out infinite", "purpose": "Blank frame wells pulse between #1a1a1a and #262624 while searching, offset 120ms per frame." },
+      { "name": "loupe", "value": "300ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Frame scales to 1.6x on hover or focus from 768px; origin inward at the strip ends." },
+      { "name": "reduced-motion", "value": "instant", "purpose": "Under prefers-reduced-motion all develop, mark, write-in, exposing and loupe motion is removed; loops render fully drawn." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single commit action, named in the world's verb. Pressed grease at rest, grease on hover.",
+      "html": "<button class=\"ds-btn-primary\">Develop sheet</button> <button class=\"ds-btn-primary\" disabled>Develop sheet</button>",
+      "css": ".ds-btn-primary { height: 44px; min-width: 144px; padding: 0 24px; background: var(--grease-press, #c9301f); color: #fff; font-family: Archivo, system-ui, sans-serif; font-size: 15px; font-weight: 600; border: 0; border-radius: 0; cursor: pointer; transition: background-color 150ms; } .ds-btn-primary:hover { background: var(--grease, #e0352b); } .ds-btn-primary:focus-visible { outline: 2px solid var(--grease, #e0352b); outline-offset: 3px; } .ds-btn-primary:disabled { background: #3a3a37; color: #9a9a94; cursor: not-allowed; }"
+    },
+    {
+      "name": "Brief Field",
+      "kind": "input",
+      "refersTo": "brief-field",
+      "description": "Borderless display-size textarea on a 2px underline that turns grease on focus.",
+      "html": "<label class=\"ds-edge-print ds-edge-amber\" for=\"ds-brief\">Brief</label><textarea id=\"ds-brief\" class=\"ds-brief\" rows=\"2\" placeholder=\"Static for a protein bar, comparison hook against sugary snacks\"></textarea>",
+      "css": ".ds-edge-print { display: block; font-family: 'Archivo Narrow', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; font-variant-numeric: tabular-nums; } .ds-edge-amber { color: var(--edge, #f2c21b); } .ds-brief { display: block; width: 100%; margin-top: 8px; padding: 0 0 12px; resize: none; background: transparent; border: 0; border-bottom: 2px solid var(--rule-strong, #43433f); border-radius: 0; color: var(--proof, #e6e6e3); caret-color: var(--grease, #e0352b); font-family: Archivo, system-ui, sans-serif; font-size: clamp(1.25rem, 2.1vw, 1.75rem); line-height: 1.375; letter-spacing: -0.015em; outline: none; } .ds-brief::placeholder { color: #8d8d88; } .ds-brief:focus { border-bottom-color: var(--grease, #e0352b); }"
+    },
+    {
+      "name": "Filter Select",
+      "kind": "input",
+      "refersTo": "select-field",
+      "description": "Square raised-sheet select with a dim edge-print label and inline chevron.",
+      "html": "<div class=\"ds-filter\"><span class=\"ds-filter-label\">Format</span><div class=\"ds-select-wrap\"><select class=\"ds-select\"><option>Any format</option><option>product on color</option></select><svg class=\"ds-chevron\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M4 6l4 4 4-4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></div></div>",
+      "css": ".ds-filter { display: flex; flex-direction: column; gap: 6px; } .ds-filter-label { font-family: 'Archivo Narrow', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--proof-dim, #a8a8a2); } .ds-select-wrap { position: relative; width: fit-content; } .ds-select { height: 44px; min-width: 176px; padding: 0 40px 0 12px; appearance: none; background: var(--sheet-raised, #1b1b1b); border: 1px solid var(--rule-strong, #43433f); border-radius: 0; color: var(--proof, #e6e6e3); font-family: Archivo, system-ui, sans-serif; font-size: 14px; } .ds-select:hover { border-color: var(--proof-dim, #a8a8a2); } .ds-select:focus-visible { outline: 2px solid var(--grease, #e0352b); outline-offset: 3px; } .ds-chevron { position: absolute; right: 12px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: var(--proof-dim, #a8a8a2); pointer-events: none; }"
+    },
+    {
+      "name": "Example Brief",
+      "kind": "card",
+      "refersTo": "example-label",
+      "description": "A frame label on the slate: top hairline, amber edge-print label, dim brief text; hover inks it to full amber.",
+      "html": "<button class=\"ds-example\" type=\"button\"><span class=\"ds-example-label\">Supplement · problem hook</span><span class=\"ds-example-text\">Static for a magnesium supplement, problem-first hook about bad sleep, Dutch.</span></button>",
+      "css": ".ds-example { display: flex; flex-direction: column; max-width: 420px; padding: 12px 0 0; text-align: left; background: transparent; border: 0; border-top: 1px solid var(--rule, #2b2b2a); cursor: pointer; transition: border-color 150ms; } .ds-example-label { font-family: 'Archivo Narrow', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: color-mix(in srgb, var(--edge, #f2c21b) 80%, transparent); } .ds-example-text { margin-top: 6px; font-family: Archivo, system-ui, sans-serif; font-size: 14px; line-height: 1.375; color: var(--proof-dim, #a8a8a2); } .ds-example:hover { border-top-color: var(--edge, #f2c21b); } .ds-example:hover .ds-example-label { color: var(--edge, #f2c21b); } .ds-example:hover .ds-example-text { color: var(--proof, #e6e6e3); } .ds-example:focus-visible { outline: 2px solid var(--grease, #e0352b); outline-offset: 3px; }"
+    },
+    {
+      "name": "Film Frame",
+      "kind": "custom",
+      "refersTo": "film-frame",
+      "description": "Signature: a black film border around a square image well, with amber edge print (frame number, days live) beneath.",
+      "html": "<div class=\"ds-frame\"><div class=\"ds-frame-well\"></div><p class=\"ds-frame-edge\"><span>01A</span><span>212 days live</span></p></div>",
+      "css": ".ds-frame { width: 220px; padding: 10px; background: var(--film, #050505); border-radius: 0; } .ds-frame-well { aspect-ratio: 1 / 1; background: #2c4f7c; } .ds-frame-edge { display: flex; justify-content: space-between; gap: 8px; margin: 8px 0 0; font-family: 'Archivo Narrow', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; font-variant-numeric: tabular-nums; color: var(--edge, #f2c21b); }"
+    },
+    {
+      "name": "Grease Mark",
+      "kind": "custom",
+      "refersTo": "grease-rank",
+      "description": "Signature: a wobbly two-pass loop through the wax filter around a pick, with its rank written in Permanent Marker.",
+      "html": "<div class=\"ds-mark\"><svg width=\"0\" height=\"0\" style=\"position:absolute\" aria-hidden=\"true\"><filter id=\"ds-wax\" x=\"-10%\" y=\"-10%\" width=\"120%\" height=\"120%\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"1.6\" numOctaves=\"2\" seed=\"7\" result=\"noise\"/><feDisplacementMap in=\"SourceGraphic\" in2=\"noise\" scale=\"0.9\" xChannelSelector=\"R\" yChannelSelector=\"G\" result=\"rough\"/><feColorMatrix in=\"noise\" type=\"matrix\" values=\"0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 2.05\" result=\"grain\"/><feComposite in=\"rough\" in2=\"grain\" operator=\"in\"/></filter></svg><div class=\"ds-mark-frame\"></div><svg class=\"ds-mark-loop\" viewBox=\"0 0 100 100\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><g filter=\"url(#ds-wax)\" fill=\"none\" stroke=\"#e0352b\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path class=\"ds-loop\" pathLength=\"1\" stroke-width=\"1.25\" d=\"M8 30 C10 6, 30 2, 50 2 C74 2, 98 4, 98 50 C98 94, 76 98, 50 98 C22 98, 2 96, 2 50 C2 22, 6 8, 26 4\"/><path class=\"ds-loop\" pathLength=\"1\" stroke-width=\"0.7\" stroke-opacity=\"0.7\" transform=\"translate(0.6 0.4)\" d=\"M8 30 C10 6, 30 2, 50 2 C74 2, 98 4, 98 50 C98 94, 76 98, 50 98 C22 98, 2 96, 2 50 C2 22, 6 8, 26 4\"/></g></svg><span class=\"ds-rank\" aria-hidden=\"true\">1</span></div>",
+      "css": ".ds-mark { position: relative; width: 200px; height: 200px; margin: 32px; } .ds-mark-frame { position: absolute; inset: 0; background: var(--film, #050505); } .ds-mark-loop { position: absolute; inset: -12px; width: calc(100% + 24px); height: calc(100% + 24px); overflow: visible; pointer-events: none; } .ds-loop { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ds-mark 520ms cubic-bezier(0.65, 0, 0.35, 1) 200ms forwards; } .ds-rank { position: absolute; left: -12px; top: -28px; font-family: 'Permanent Marker', cursive; font-size: 40px; line-height: 1; color: var(--grease, #e0352b); transform: rotate(-6deg); animation: ds-write 280ms cubic-bezier(0.16, 1, 0.3, 1) 580ms both; } @keyframes ds-mark { to { stroke-dashoffset: 0; } } @keyframes ds-write { from { opacity: 0; transform: translateY(4px) rotate(-8deg) scale(0.9); } to { opacity: 1; transform: rotate(-6deg); } } @media (prefers-reduced-motion: reduce) { .ds-loop { animation: none; stroke-dashoffset: 0; } .ds-rank { animation: none; } }"
+    },
+    {
+      "name": "Rail",
+      "kind": "nav",
+      "refersTo": "",
+      "description": "48px top rail: product name left, library facts in dim edge print right, hairline beneath.",
+      "html": "<header class=\"ds-rail\"><span class=\"ds-rail-name\">Reference search</span><span class=\"ds-rail-facts\">Static ads · Meta Ad Library · picked by concept, not keyword</span></header>",
+      "css": ".ds-rail { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 48px; padding: 0 32px; border-bottom: 1px solid var(--rule, #2b2b2a); background: var(--sheet, #141414); } .ds-rail-name { font-family: Archivo, system-ui, sans-serif; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; color: var(--proof, #e6e6e3); } .ds-rail-facts { font-family: 'Archivo Narrow', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--proof-dim, #a8a8a2); }"
+    },
+    {
+      "name": "Ad Library Link",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Underlined 13px proof link with an inline external-link glyph; underline turns grease on hover.",
+      "html": "<a class=\"ds-link\" href=\"#\">Open in Ad Library <svg viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M6 3H3v10h10v-3M9 3h4v4M13 3 7 9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></a>",
+      "css": ".ds-link { display: inline-flex; align-items: center; gap: 6px; font-family: Archivo, system-ui, sans-serif; font-size: 13px; color: var(--proof, #e6e6e3); text-decoration: underline; text-decoration-color: var(--rule-strong, #43433f); text-underline-offset: 4px; } .ds-link svg { width: 14px; height: 14px; } .ds-link:hover { text-decoration-color: var(--grease, #e0352b); } .ds-link:focus-visible { outline: 2px solid var(--grease, #e0352b); outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Contact Sheet & Grease Pencil",
+    "overview": "Picking references is a picture edit. The interface is a darkroom proof sheet: a charcoal ground, each ad held in a black film frame with edge print running beneath it, and a single grease-pencil red that is the editor's hand. The reranker's picks are not badged or highlighted; they are circled, wobbly and waxy, and numbered in marker in the order they were chosen. Everything else stays quiet so the ads, which are the content, carry the colour.\n\nDensity is that of a working sheet, not a dashboard: one slate for the brief, one row of controls in edge print, then a strip of five equal frames at desktop width. Structure comes from hairline rules and the black of the film, never from cards, fills, or elevation. The system is dark only; it is built to read on a screen share.",
+    "keyCharacteristics": [
+      "Charcoal sheet, black film frames, hairline rules; square corners everywhere.",
+      "Amber edge print (narrow tracked caps) for metadata, labels and frame numbers.",
+      "Grease-pencil red is the only mark: picks, rank numerals, focus, the primary action, the caret, selection.",
+      "Hand-drawn marks are real geometry with an SVG wax filter, never a raster or an icon.",
+      "Motion is photographic: frames develop, then the pencil circles them in rank order."
+    ],
+    "rules": [
+      { "name": "The One Mark Rule", "body": "Grease red means \"chosen\" or \"act here\". It never decorates, never fills a panel, and never appears as a second accent next to another mark colour.", "section": "colors" },
+      { "name": "The Ink Split Rule", "body": "Amber informs, red judges. Metadata and labels are amber or grey; anything that ranks, selects, or commits is red.", "section": "colors" },
+      { "name": "The Marker Is Only For Ranks Rule", "body": "Permanent Marker appears only as the handwritten rank numeral. It is never used for words, headings, or buttons.", "section": "typography" },
+      { "name": "The Edge Print Rule", "body": "Metadata speaks in edge print: Archivo Narrow, uppercase, 0.09em tracking. Reading text never does.", "section": "typography" },
+      { "name": "The No-Lift Rule", "body": "Nothing floats. Separation comes from film black, hairlines, and scale, never from a cast shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do hold every ad in a black film frame with edge print beneath it.",
+      "Do keep grease red for marks, focus, and the single primary action.",
+      "Do set all metadata, labels and status lines in edge print (Archivo Narrow 600, 0.75rem, 0.09em, uppercase).",
+      "Do draw hand marks as SVG paths through the `#wax` filter, in rank order, and make them instant under reduced motion.",
+      "Do separate regions with hairlines (`rule`, `rule-strong`) and space, keeping corners square.",
+      "Do label proxies as proxies in amber edge print beside the number they qualify."
+    ],
+    "donts": [
+      "Don't use rounded cards, box shadows, or gradients.",
+      "Don't introduce a second accent colour; amber and red are the only inks.",
+      "Don't use Permanent Marker for anything but rank numerals.",
+      "Don't fake the pencil with raster textures, emoji, or icon-font glyphs.",
+      "Don't add a light theme; the sheet is dark only."
+    ]
+  }
+}
