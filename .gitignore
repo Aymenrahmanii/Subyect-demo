@@ -51,6 +51,11 @@ next-env.d.ts
 !/data/ads/.gitkeep
 /public/ads/
 
+# Ad library data built from those ads (captions, headlines): keep local too
+/data/ads.csv
+/data/tags/*
+!/data/tags/.gitkeep
+
 # Impeccable session scratch
 /.impeccable/questions/
 /.impeccable/answer.txt
