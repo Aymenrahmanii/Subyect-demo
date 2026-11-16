@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { mediaTypeFor, parseAdsCsv, publicImageUrl, sniffImageType } from "../lib/ads";
 import { missingConfig, missingConfigMessage } from "../lib/config";
-import { hitRate, isHit } from "../lib/metrics";
+import { firstHitRank, hitRate, isHit, meanReciprocalRank } from "../lib/metrics";
 import { applyPicks, MAX_PER_BRAND, type Candidate } from "../lib/rerank";
 import { buildOrTsQuery, buildSearchText } from "../lib/searchText";
 import { TagSchema, type Tags } from "../lib/taxonomy";
@@ -168,5 +168,23 @@ describe("sniffImageType", () => {
   it("rejects empty files and saved web pages with a clear reason", () => {
     expect(() => sniffImageType(new Uint8Array(), "data/ads/x.png")).toThrow(/is empty \(0 bytes\)/);
     expect(() => sniffImageType(text("<!DOCTYPE html><html>"), "data/ads/x.png")).toThrow(/saved web page/);
+  });
+});
+
+describe("rank metrics", () => {
+  it("finds the first acceptable rank", () => {
+    expect(firstHitRank(["a", "b", "c"], ["c", "b"])).toBe(2);
+    expect(firstHitRank(["a"], ["z"])).toBeNull();
+  });
+
+  it("averages reciprocal ranks, counting misses as 0", () => {
+    expect(
+      meanReciprocalRank([
+        { returnedIds: ["a"], acceptable: ["a"] },
+        { returnedIds: ["x", "a"], acceptable: ["a"] },
+        { returnedIds: ["x"], acceptable: ["a"] },
+        { returnedIds: ["x", "y", "z", "a"], acceptable: ["a"] },
+      ]),
+    ).toBeCloseTo((1 + 0.5 + 0 + 0.25) / 4);
   });
 });

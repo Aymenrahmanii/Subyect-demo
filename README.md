@@ -4,31 +4,37 @@ Type a concept brief for a static ad and get the five best reference ads from a 
 
 ## How it works
 
-1. **Collect**: 60 static ads from 8 DTC brands, saved by hand from the Meta Ad Library (`data/ads/`, `data/ads.csv`).
+1. **Collect**: 23 static ads from 5 DTC brands (Myprotein, Gymshark, XXL Nutrition, Jimmy Joy, Oatly), taken from the public Meta Ad Library for the Netherlands (`data/ads/`, `data/ads.csv`, both kept out of git).
 2. **Tag**: each ad is tagged once by a vision model into fixed value lists (`scripts/tag.ts`, schema in `lib/taxonomy.ts`).
 3. **Store**: tags plus a Voyage `voyage-3.5` embedding go into one Postgres table on Neon with pgvector (`db/schema.sql`, `scripts/load.ts`).
 4. **Search**: embed the brief, fetch 20 candidates with optional filters, then an LLM rerank (Gemini or Claude) picks the best 5, at most 2 per brand (`lib/search.ts`).
 5. **Expose**: the same function as the MCP tool `search_references` (`mcp/server.ts`).
-6. **Measure**: hit rate at 5 on 12 test briefs against a keyword baseline (`scripts/eval.ts`).
+6. **Measure**: hit@5, hit@1 and MRR on 12 test briefs against a keyword baseline (`scripts/eval.ts`).
 
 The page, the MCP tool and the eval all call one function, `searchReferences` in `lib/search.ts`.
 
 ## Results
 
-| Variant | Hit rate at 5 (12 briefs) |
-|---|---|
-| Keyword baseline (Postgres full-text) | _run `npm run eval`_ |
-| Vector only | |
-| Vector plus rerank | |
+23 real static ads from 5 brands (Meta Ad Library, shown in the Netherlands), 12 test briefs.
+
+| Variant | Hit@5 | Hit@1 | MRR |
+|---|---|---|---|
+| Keyword baseline (Postgres full-text) | 10/12 | 7/12 | 0.68 |
+| Vector only | 12/12 | 11/12 | 0.96 |
+| Vector plus rerank | 12/12 | 12/12 | 1.00 |
+
+Hit@5 saturates on a library this small: the top 5 is over a fifth of all ads, so both vector variants score 12/12. Hit@1 (is the first result acceptable?) and MRR are where the variants separate: meaning-based search beats keywords clearly, and rerank fixes the one brief where vector order put the right ad second. With 12 briefs, that last step is one brief of evidence, not a proven gain.
+
+The briefs and acceptable ads were drafted with AI help by looking at the images (not the search results) and reviewed by me.
 
 Tag check: checked 10 ads by hand and agreed with __ of 100 fields.
 
-Typical search: __ s and __ tokens (shown under the results on the page).
+Typical search: 2 to 4 s and about 4,200 tokens (embed ~0.5 s, database ~0.2 s, rerank ~1.5 s).
 
 ## Limits
 
-- 60 ads is a small library, and all of them are statics.
-- One person judged the eval, on 12 briefs: it's a smoke test, not a benchmark.
+- 23 ads from 5 brands is a small library (no skincare yet), and all of them are statics.
+- The eval is 12 briefs, AI-drafted and reviewed by one person: a smoke test, not a benchmark.
 - Days running is a proxy for performance, not real results.
 
 ## With real data, next

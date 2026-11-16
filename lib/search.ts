@@ -63,11 +63,15 @@ function clampLimit(limit: number | undefined): number {
 export async function searchReferences(
   brief: string,
   filters: SearchFilters = {},
+  // The eval passes the brief's vector so each brief is embedded only once.
+  precomputedVector?: number[],
 ): Promise<{ results: SearchResult[]; stats: SearchStats }> {
   const limit = clampLimit(filters.limit);
   const t0 = performance.now();
 
-  const { vector, tokens: embedTokens } = await embedOne(brief, "query");
+  const { vector, tokens: embedTokens } = precomputedVector
+    ? { vector: precomputedVector, tokens: 0 }
+    : await embedOne(brief, "query");
   const t1 = performance.now();
 
   const candidates = await fetchCandidates(vector, filters);
@@ -104,8 +108,8 @@ export async function searchReferences(
 }
 
 /** Eval variant: top-k by embedding distance, no rerank. */
-export async function vectorOnlySearch(brief: string, k = DEFAULT_LIMIT): Promise<Candidate[]> {
-  const { vector } = await embedOne(brief, "query");
+export async function vectorOnlySearch(brief: string, k = DEFAULT_LIMIT, precomputedVector?: number[]): Promise<Candidate[]> {
+  const vector = precomputedVector ?? (await embedOne(brief, "query")).vector;
   return fetchCandidates(vector, {}, k);
 }
 
