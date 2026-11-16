@@ -1,0 +1,50 @@
+[
+  {
+    "brief": "Breakfast drink concept: show the glass up close and stack its nutrition against everyday foods people already know, like eggs, apples and bread.",
+    "acceptable": ["jimmyjoy-01"]
+  },
+  {
+    "brief": "Weight-loss angle for a meal shake: someone who tried every diet trick before a simple routine finally worked, backed by a customer quote and a star rating.",
+    "acceptable": ["jimmyjoy-02"]
+  },
+  {
+    "brief": "Feels like a customer's own post: a hand holding the pouch, with their personal list of reasons they always keep it in the cupboard.",
+    "acceptable": ["jimmyjoy-03"]
+  },
+  {
+    "brief": "Loud weekly deal announcement in Dutch, all typography, no product photo, one clear button.",
+    "acceptable": ["xxlnutrition-01"]
+  },
+  {
+    "brief": "Creator-style phone photo at home: a woman relaxing in a matching training set, cosy and unpolished, not a studio shoot.",
+    "acceptable": ["xxlnutrition-02", "xxlnutrition-03"]
+  },
+  {
+    "brief": "Launch of a new men's training top: model in the studio, a small 'new' label and the product name set on the image.",
+    "acceptable": ["xxlnutrition-04"]
+  },
+  {
+    "brief": "Plain men's tee on a neutral backdrop, nothing on the image, the bestseller sale carried by the caption.",
+    "acceptable": ["gymshark-01", "gymshark-03", "gymshark-04"]
+  },
+  {
+    "brief": "Women's leggings or a matching set, cropped studio shot on grey, introducing a new collection.",
+    "acceptable": ["myprotein-01", "myprotein-02", "myprotein-06"]
+  },
+  {
+    "brief": "Cosy loungewear for the colder months: soft grey sweats on a model in the studio, tied to a seasonal sale.",
+    "acceptable": ["myprotein-04", "myprotein-05"]
+  },
+  {
+    "brief": "Light shorts for hot summer workouts, framed on the legs and shorts only, airy and breathable feel.",
+    "acceptable": ["gymshark-05", "gymshark-07", "myprotein-07"]
+  },
+  {
+    "brief": "Self-aware brand stunt: an ordinary-looking poster placed somewhere absurd, shot as a real-world photo that jokes about being an ad.",
+    "acceptable": ["oatly-01"]
+  },
+  {
+    "brief": "Purpose-led message for an awareness day: a documentary nature photo, no product in sight.",
+    "acceptable": ["oatly-02"]
+  }
+]
