@@ -35,7 +35,7 @@ const CANDIDATE_COLUMNS = `
   text_density, has_person, coalesce(headline_text, '') as headline_text,
   coalesce(angle, '') as angle, coalesce(summary, '') as summary,
   image_path, ad_library_url,
-  current_date - started_on as days_running`;
+  coalesce(ended_on, current_date) - started_on as days_running`;
 
 /** Nearest ads by cosine distance; filters apply only when passed. */
 export async function fetchCandidates(vector: number[], filters: SearchFilters, k = CANDIDATE_COUNT): Promise<Candidate[]> {

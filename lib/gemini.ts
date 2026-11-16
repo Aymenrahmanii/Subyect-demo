@@ -1,11 +1,14 @@
 import { z } from "zod";
 import type { JsonCall, JsonCallResult } from "./llm";
 
-// Pinned rather than the gemini-flash-latest alias, which hung in testing on 2026-11-15.
-// Free tier, reads images, follows JSON schemas, answers in about a second.
-export const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
+// Pinned rather than an alias (gemini-flash-latest hung in testing on 2026-11-15).
+// Lite: reads images, follows JSON schemas, ~1.5 s, and a larger free daily quota than
+// gemini-2.5-flash, which ran out after ~20 tagging calls on 2026-11-16.
+export const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-3.5-flash-lite";
 
 const MAX_ATTEMPTS = 4;
+// Per-minute limits ask for seconds; a longer wait means the daily quota is gone.
+const MAX_WAIT_MS = 60_000;
 
 interface GeminiResponse {
   candidates?: { content?: { parts?: { text?: string }[] }; finishReason?: string }[];
@@ -58,9 +61,15 @@ export async function callGeminiJson<S extends z.ZodType>(call: JsonCall<S>): Pr
     });
     const json = (await res.json().catch(() => null)) as GeminiResponse | null;
 
-    // Free-tier rate limits (429) and overload (503) are normal: wait and retry.
+    // Free-tier rate limits (429) and overload (503) are normal: wait and retry,
+    // unless Gemini asks for a long wait, which means the daily quota is used up.
     if ((res.status === 429 || res.status === 503) && attempt < MAX_ATTEMPTS - 1) {
       const wait = retryDelayMs(json, attempt);
+      if (wait > MAX_WAIT_MS) {
+        throw new Error(
+          `Gemini quota for ${GEMINI_MODEL} is used up (retry in ${Math.round(wait / 3_600_000)} h). Set GEMINI_MODEL to another model in .env.local, or try again later.`,
+        );
+      }
       console.error(`Gemini ${res.status}, retrying in ${Math.round(wait / 1000)}s`);
       await sleep(wait);
       continue;

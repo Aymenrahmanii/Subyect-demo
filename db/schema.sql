@@ -7,6 +7,7 @@ create table if not exists ads (
   image_path         text not null,
   ad_library_url     text,
   started_on         date,
+  ended_on           date,         -- null while the ad is still running
   primary_text       text,
   hook_type          text,
   format             text,
@@ -26,3 +27,6 @@ create table if not exists ads (
 
 -- No vector index: 60 rows scan instantly. At 6,469 ads, add:
 -- create index on ads using hnsw (embedding vector_cosine_ops);
+
+-- Tables created before ended_on existed.
+alter table ads add column if not exists ended_on date;

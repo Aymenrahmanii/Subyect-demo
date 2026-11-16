@@ -4,7 +4,7 @@
 import { ADS_CSV, ROOT, TAGS_DIR } from "./env";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { mediaTypeFor, parseAdsCsv, type AdRow } from "../lib/ads";
+import { parseAdsCsv, sniffImageType, type AdRow, type ImageMediaType } from "../lib/ads";
 import { callJson, llmProvider } from "../lib/llm";
 import { TagSchema, type Tags } from "../lib/taxonomy";
 
@@ -33,14 +33,18 @@ async function exists(file: string): Promise<boolean> {
   return fs.access(file).then(() => true, () => false);
 }
 
-async function tagOne(ad: AdRow): Promise<{ tags: Tags; tokens: number }> {
-  const imageFile = path.resolve(ROOT, ad.image_path);
-  const data = (await fs.readFile(imageFile)).toString("base64");
+interface Job {
+  ad: AdRow;
+  mediaType: ImageMediaType;
+  base64: string;
+}
+
+async function tagOne({ ad, mediaType, base64 }: Job): Promise<{ tags: Tags; tokens: number }> {
   const call = () =>
     callJson({
       schema: TagSchema,
       system: SYSTEM,
-      image: { mediaType: mediaTypeFor(ad.image_path), base64: data },
+      image: { mediaType, base64 },
       text: `Brand: ${ad.brand}\nCategory: ${ad.category}\nCaption above the image:\n${ad.primary_text || "(none)"}`,
     });
   let result;
@@ -56,23 +60,45 @@ async function tagOne(ad: AdRow): Promise<{ tags: Tags; tokens: number }> {
 
 async function main() {
   const ads = parseAdsCsv(await fs.readFile(ADS_CSV, "utf8"));
+  if (ads.length === 0) {
+    console.error("data/ads.csv has no rows yet. Save the ad images in data/ads/ and add one row per ad (see data/ads.example.csv).");
+    process.exit(1);
+  }
   await fs.mkdir(TAGS_DIR, { recursive: true });
 
-  const todo: AdRow[] = [];
+  // Check every image before spending any API calls: missing, empty or non-image files fail here.
+  const todo: Job[] = [];
+  const badFiles: string[] = [];
+  let alreadyTagged = 0;
   for (const ad of ads) {
-    if (!(await exists(path.resolve(ROOT, ad.image_path)))) throw new Error(`${ad.id}: image not found at ${ad.image_path}`);
-    if (!(await exists(path.join(TAGS_DIR, `${ad.id}.json`)))) todo.push(ad);
+    if (await exists(path.join(TAGS_DIR, `${ad.id}.json`))) {
+      alreadyTagged++;
+      continue;
+    }
+    const imageFile = path.resolve(ROOT, ad.image_path);
+    if (!(await exists(imageFile))) {
+      badFiles.push(`${ad.id}: image not found at ${ad.image_path}`);
+      continue;
+    }
+    const bytes = await fs.readFile(imageFile);
+    try {
+      todo.push({ ad, mediaType: sniffImageType(bytes, ad.image_path), base64: bytes.toString("base64") });
+    } catch (err) {
+      badFiles.push(`${ad.id}: ${(err as Error).message}`);
+    }
   }
-  console.log(`${ads.length} ads in ads.csv, ${ads.length - todo.length} already tagged, ${todo.length} to tag`);
+  console.log(`${ads.length} ads in ads.csv, ${alreadyTagged} already tagged, ${todo.length} to tag`);
+  if (badFiles.length) console.error(`Skipping ${badFiles.length} ads with a bad image file:\n  ${badFiles.join("\n  ")}`);
 
   let done = 0;
-  let failed = 0;
+  let failed = badFiles.length;
   let tokens = 0;
   const queue = [...todo];
   const worker = async () => {
-    for (let ad = queue.shift(); ad; ad = queue.shift()) {
+    for (let job = queue.shift(); job; job = queue.shift()) {
+      const { ad } = job;
       try {
-        const result = await tagOne(ad);
+        const result = await tagOne(job);
         await fs.writeFile(path.join(TAGS_DIR, `${ad.id}.json`), JSON.stringify(result.tags, null, 2) + "\n");
         tokens += result.tokens;
         console.log(`  [${++done}/${todo.length}] ${ad.id}: ${result.tags.hook_type} / ${result.tags.format}`);

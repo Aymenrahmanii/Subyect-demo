@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mediaTypeFor, parseAdsCsv, publicImageUrl } from "../lib/ads";
+import { mediaTypeFor, parseAdsCsv, publicImageUrl, sniffImageType } from "../lib/ads";
 import { missingConfig, missingConfigMessage } from "../lib/config";
 import { hitRate, isHit } from "../lib/metrics";
 import { applyPicks, MAX_PER_BRAND, type Candidate } from "../lib/rerank";
@@ -32,7 +32,7 @@ describe("parseAdsCsv", () => {
     const csv = '﻿id,brand,category,image_path,ad_library_url,started_on,primary_text\n' +
       'a-01,A,skincare,data/ads/a-01.png,https://x,2026-08-02,"Hi, there"\n';
     expect(parseAdsCsv(csv)).toEqual([
-      { id: "a-01", brand: "A", category: "skincare", image_path: "data/ads/a-01.png", ad_library_url: "https://x", started_on: "2026-08-02", primary_text: "Hi, there" },
+      { id: "a-01", brand: "A", category: "skincare", image_path: "data/ads/a-01.png", ad_library_url: "https://x", started_on: "2026-08-02", ended_on: "", primary_text: "Hi, there" },
     ]);
   });
 
@@ -64,7 +64,7 @@ describe("TagSchema", () => {
 
 describe("buildSearchText", () => {
   it("includes the free text and the tags written as words", () => {
-    const ad = { id: "a", brand: "A", category: "food_and_drink", image_path: "a.png", ad_library_url: "", started_on: "", primary_text: "Nu 20% korting" };
+    const ad = { id: "a", brand: "A", category: "food_and_drink", image_path: "a.png", ad_library_url: "", started_on: "", ended_on: "", primary_text: "Nu 20% korting" };
     const text = buildSearchText(ad, tags);
     expect(text).toContain(tags.angle);
     expect(text).toContain("Beter slapen in 7 dagen");
@@ -151,5 +151,22 @@ describe("missingConfig", () => {
       "Search isn't set up yet: VOYAGE_API_KEY is missing. Add it to .env.local and restart the server.",
     );
     expect(missingConfigMessage(["DATABASE_URL", "VOYAGE_API_KEY"])).toContain("are missing. Add them");
+  });
+});
+
+describe("sniffImageType", () => {
+  const bytes = (...b: number[]) => new Uint8Array(b);
+  const text = (s: string) => new TextEncoder().encode(s);
+
+  it("reads the real type from the first bytes, whatever the extension", () => {
+    expect(sniffImageType(bytes(0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a), "a.png")).toBe("image/png");
+    expect(sniffImageType(bytes(0xff, 0xd8, 0xff, 0xe0), "a.png")).toBe("image/jpeg");
+    expect(sniffImageType(text("RIFF\0\0\0\0WEBPVP8 "), "a.png")).toBe("image/webp");
+    expect(sniffImageType(text("GIF89a"), "a.gif")).toBe("image/gif");
+  });
+
+  it("rejects empty files and saved web pages with a clear reason", () => {
+    expect(() => sniffImageType(new Uint8Array(), "data/ads/x.png")).toThrow(/is empty \(0 bytes\)/);
+    expect(() => sniffImageType(text("<!DOCTYPE html><html>"), "data/ads/x.png")).toThrow(/saved web page/);
   });
 });

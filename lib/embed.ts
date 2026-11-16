@@ -21,19 +21,30 @@ export async function embed(texts: string[], inputType: InputType): Promise<Embe
   const apiKey = process.env.VOYAGE_API_KEY;
   if (!apiKey) throw new Error("VOYAGE_API_KEY is not set (put it in .env.local)");
 
-  const res = await fetch("https://api.voyageai.com/v1/embeddings", {
-    method: "POST",
-    headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      input: texts,
-      model: EMBEDDING_MODEL,
-      input_type: inputType,
-      output_dimension: EMBEDDING_DIM,
-    }),
-    signal: AbortSignal.timeout(30_000),
-  });
+  const body_ = JSON.stringify({ input: texts, model: EMBEDDING_MODEL, input_type: inputType, output_dimension: EMBEDDING_DIM });
+  let res: Response;
+  for (let attempt = 0; ; attempt++) {
+    res = await fetch("https://api.voyageai.com/v1/embeddings", {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${apiKey}` },
+      body: body_,
+      signal: AbortSignal.timeout(30_000),
+    });
+    // Without a payment method Voyage allows 3 requests a minute: wait out the window and retry.
+    if (res.status === 429 && attempt < 2) {
+      const wait = 21_000;
+      console.error(`Voyage 429 (rate limit), retrying in ${wait / 1000}s`);
+      await new Promise((r) => setTimeout(r, wait));
+      continue;
+    }
+    break;
+  }
   if (!res.ok) {
-    throw new Error(`Voyage embeddings failed: ${res.status} ${await res.text()}`);
+    const detail = await res.text();
+    if (res.status === 429) {
+      throw new Error("Voyage rate limit reached (3 searches a minute without a payment method). Wait a minute, or add a payment method at dashboard.voyageai.com.");
+    }
+    throw new Error(`Voyage embeddings failed: ${res.status} ${detail}`);
   }
   const body = (await res.json()) as VoyageResponse;
   const vectors = [...body.data].sort((a, b) => a.index - b.index).map((d) => d.embedding);

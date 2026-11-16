@@ -40,6 +40,14 @@ async function main() {
     rows.push({ ad, tags, searchText: buildSearchText(ad, tags) });
   }
   if (missing.length) console.warn(`Skipping ${missing.length} untagged ads (run npm run tag): ${missing.join(", ")}`);
+  if (rows.length === 0) {
+    console.error(
+      ads.length === 0
+        ? "data/ads.csv has no rows yet. Add the ads, then run npm run tag before npm run load."
+        : "None of the ads are tagged yet. Run npm run tag first.",
+    );
+    process.exit(1);
+  }
 
   const publicDir = path.join(ROOT, "public", "ads");
   await fs.mkdir(publicDir, { recursive: true });
@@ -53,11 +61,11 @@ async function main() {
       await db().query(
         `insert into ads (id, brand, category, image_path, ad_library_url, started_on, primary_text,
                           hook_type, format, offer, product_visibility, text_density, has_person, language,
-                          headline_text, angle, summary, search_text, embedding)
-         values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19::vector)
+                          headline_text, angle, summary, search_text, embedding, ended_on)
+         values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19::vector,$20)
          on conflict (id) do update set
            brand = excluded.brand, category = excluded.category, image_path = excluded.image_path,
-           ad_library_url = excluded.ad_library_url, started_on = excluded.started_on,
+           ad_library_url = excluded.ad_library_url, started_on = excluded.started_on, ended_on = excluded.ended_on,
            primary_text = excluded.primary_text, hook_type = excluded.hook_type, format = excluded.format,
            offer = excluded.offer, product_visibility = excluded.product_visibility,
            text_density = excluded.text_density, has_person = excluded.has_person,
@@ -67,7 +75,7 @@ async function main() {
           ad.id, ad.brand, ad.category, ad.image_path, ad.ad_library_url || null, ad.started_on || null,
           ad.primary_text || null, tags.hook_type, tags.format, tags.offer, tags.product_visibility,
           tags.text_density, tags.has_person, tags.language, tags.headline_text, tags.angle, tags.summary,
-          searchText, toVectorLiteral(vectors[j]),
+          searchText, toVectorLiteral(vectors[j]), ad.ended_on || null,
         ],
       );
       await fs.copyFile(path.resolve(ROOT, ad.image_path), path.join(publicDir, path.basename(ad.image_path)));

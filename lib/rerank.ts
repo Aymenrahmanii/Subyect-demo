@@ -40,13 +40,15 @@ export type RerankPicks = z.infer<typeof RerankSchema>["results"];
 export function rerankSystemPrompt(limit: number): string {
   return [
     "You pick reference ads for a creative strategist writing a static ad concept.",
-    `From the candidate ads, return the best ${limit}, best first, as JSON.`,
+    `From the candidate ads, return exactly ${limit} ads, best first, as JSON (fewer only if there are fewer candidates).`,
     "Rules:",
     "- Judge fit to the brief's hook, format and angle, not the product category alone.",
     `- Return at most ${MAX_PER_BRAND} ads per brand, so results stay varied.`,
     "- Use days_running only to break ties between otherwise equal ads, and mention it in the reason when it does.",
     "- Only return ids that appear in the candidates. Copy them exactly.",
-    "- Each reason is one short line naming what matches (hook, format, angle, offer, language).",
+    "- Each reason is one short line a strategist would find useful: say concretely what in this ad matches the brief",
+    '  (e.g. "Dutch 20% korting headline over a flat orange product shot"), and note a mismatch if the fit is partial.',
+    '  Never write a generic reason like "matches hook, format and angle".',
   ].join("\n");
 }
 
